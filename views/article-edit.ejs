@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('index_templates/header')-%>
+  <body>
+    <div class="container">
+      <header class="blog-header py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+          <div class="col-4 pt-1">
+            <a class="btn btn-s btn-primary" href="/route/dashboard">Back</a>
+          </div>
+          <div class="col-4 text-center">
+            <h1><%= locals.user%>'s Dashboard</h1>
+          </div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <a id="PostBtn" class="btn btn-xl btn-outline-secondary" href="/author-settings"
+              >Settings</a
+            >
+            <a
+              class="btn btn-sm btn-outline-secondary"
+              style="margin-left: 15px"
+              href="/route/logout"
+              >Sign Out</a
+            >
+          </div>
+        </div>
+      </header>
+      <div class="jumbotron p-4 p-md-4 text-white rounded bg-dark">
+        <div class="col-md px-0 p-3 d-flex justify-content-center">
+          <h1>Edit Your Draft</h1>
+        </div>
+        <div class="form-group">
+          <div class="col">
+            <p class="font-weight-bold font italic">Created: <%=draft_dateCreated%></p>
+          </div>
+          <div class="col">
+            <p class="font-weight-bold font italic">Last Modified: <%=draft_lastModified%></p>
+          </div>
+          <!--send form result to this href, via POST method-->
+          <form action="/route/edit_save" method="POST">
+            <div>
+              <input
+                type="text"
+                id="articleID"
+                name="articleID"
+                value="<%=draft_articleID%>"
+                required
+                style="display: none"
+              />
+              <label for="title">Title</label>
+              <input type="text" id="title" name="CD_title" value="<%=draft_title%>" required />
+              <label for="sub-title">Sub-Title</label>
+              <input
+                type="text"
+                id="sub-title"
+                name="CD_sub_title"
+                value="<%=draft_subtitle%>"
+                required
+              />
+            </div>
+            <div>
+              <label for="body">Body</label>
+              <textarea class="form-control" id="body" name="CD_body"><%=draft_body%></textarea>
+            </div>
+            <div class="py-2">
+              <button class="btn btn-success" type="submit" id="edit-draft">Save</button>
+            </div>
+          </form>
+          <div id="edit-done" class="container w-30 border border-secondary py-1 d-none">
+            <p class="text-dark">Succesfully edited draft! Returning to dashboard...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%-include('index_templates/footer')-%>
+  </body>
+  <style>
+    #edit-done {
+      background-color: rgb(102, 212, 102);
+    }
+  </style>
+  <script>
+    //check if all inputs all filled
+    function validateForm() {
+      const titleInput = document.getElementById("title").value;
+      const subTitleInput = document.getElementById("sub-title").value;
+      const bodyInput = document.getElementById("body").value;
+
+      if (titleInput === "" || subTitleInput === "" || bodyInput === "") {
+        alert("Please fill in all the required fields.");
+        return false;
+      }
+      return true;
+    }
+    //we want author to see the message Succesfully edited draft! Returning to dashboard... before page redirects
+    //so we set a timeout function
+    const formSubmitButton = document.getElementById("edit-draft");
+    formSubmitButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      if (validateForm()) {
+        const targetElement = document.getElementById("edit-done");
+        targetElement.classList.remove("d-none");
+        targetElement.classList.add("d-block");
+
+        setTimeout(() => {
+          event.target.closest("form").submit();
+        }, 2000);
+      }
+    });
+  </script>
+</html>

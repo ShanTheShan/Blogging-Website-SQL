@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('index_templates/header')-%>
+  <body>
+    <div class="container-fluid">
+      <header class="blog-header py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+          <div class="col-4 pt-1"></div>
+          <div class="col-4 text-center">
+            <h1><%= locals.user%>'s Dashboard</h1>
+            <h2><%= authorTitle%></h2>
+            <h3><%= authorSubT%></h3>
+            <h4><%= authorName%></h4>
+          </div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <a id="PostBtn" class="btn btn-xl btn-warning" href="/route/author-settings"
+              >Settings</a
+            >
+            <a class="btn btn-sm btn-danger" style="margin-left: 15px" href="/route/logout"
+              >Sign Out</a
+            >
+          </div>
+        </div>
+      </header>
+
+      <div class="nav-scroller py-1 mb-2"></div>
+
+      <!--For published articles-->
+      <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
+        <div class="col-md px-0 d-flex justify-content-center"><h1>Published Articles</h1></div>
+        <div class="col d-md px-0 d-flex justify-content-center m-3">
+          <div><h4>Title</h4></div>
+          <div><h4>Sub-Title</h4></div>
+          <div><h4>Date-Created</h4></div>
+          <div><h4>Date-Published</h4></div>
+          <div><h4>Likes</h4></div>
+          <div><h4>Actions</h4></div>
+          <style>
+            .col h4 {
+              margin-right: 50px;
+            }
+          </style>
+        </div>
+        <!--Dynamic Publish Articles rendering goes here-->
+        <% if (!publishedData) { %>
+        <div class="col d-md px-0 d-flex justify-content-center m-3">
+          No published articles, yet...
+        </div>
+        <!--iterate over the rows of articles retrieve and dynamically render templates,giving each form an index-->
+        <% } else { %> <% publishedforms.forEach((publishedforms, index) => { %>
+        <form
+          id="form-<%= publishedforms.id %>"
+          action="/route/articleEdit"
+          method="POST"
+          class="d-flex justify-content-center"
+        >
+          <!-- Form fields and inputs go here -->
+          <!-- hide the articleID, user doesnt need it, but server needs it to query the correct row in DB -->
+          <input
+            type="text"
+            name="articleID"
+            id="ID_article"
+            value="<%= publishedData[index].articleID %>"
+            readonly
+            style="display: none"
+          />
+          <input
+            type="text"
+            class="border-0"
+            name="title"
+            value="<%= publishedData[index].title %>"
+            readonly
+          />
+          <input
+            type="text"
+            class="border-0"
+            name="subtitle"
+            value="<%= publishedData[index].subtitle %>"
+            readonly
+          />
+          <input
+            type="text"
+            class="border-0"
+            name="dateCreated"
+            value="<%= publishedData[index].dateCreated %>"
+            readonly
+          />
+          <input
+            type="text"
+            class="border-0"
+            name="datePublished"
+            value="<%= publishedData[index].datePublished %>"
+            readonly
+          />
+          <input
+            type="text"
+            class="border-0"
+            name="likes"
+            value="<%= publishedData[index].likes %>"
+            readonly
+          />
+          <button
+            class="btn btn-xl btn-info"
+            type="submit"
+            name="buttonClick"
+            id="shareBtn"
+            value="share"
+          >
+            Share
+          </button>
+          <!-- display an alert window with the article that was clicked, displaying that aritcles's reader-article page -->
+          <button class="btn btn-xl btn-danger" type="submit" name="buttonClick" value="delete">
+            Delete
+          </button>
+        </form>
+        <% }) %> <% } %>
+        <!------------------>
+      </div>
+      <!--For draft articles-->
+      <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
+        <div class="col-md px-0 d-flex justify-content-center">
+          <h1>Draft Articles</h1>
+        </div>
+        <div class="col d-md px-0 d-flex justify-content-center m-3">
+          <div><h4 id="drafth4">Title</h4></div>
+          <div><h4 id="drafth4">Sub-Title</h4></div>
+          <div><h4 id="drafth4">Date-Created</h4></div>
+          <div><h4 id="drafth4">Date-Modified</h4></div>
+          <div><h4 id="drafth4">Actions</h4></div>
+          <style>
+            .col #drafth4 {
+              margin-right: 70px;
+            }
+          </style>
+        </div>
+        <% if (!draftData) { %>
+        <div class="col d-md px-0 d-flex justify-content-center m-3">
+          No draft articles. Create one!
+        </div>
+        <!--iterate over the rows of articles retrieve and dynamically render templates-->
+        <% } else { %> <% draftforms.forEach((draftforms, index) => { %>
+        <form
+          id="form-<%= draftforms.id %>"
+          action="/route/articleEdit"
+          method="POST"
+          class="d-flex justify-content-center"
+        >
+          <!-- Form fields and inputs go here -->
+          <!-- hide the articleID, user doesnt need it, but server needs it to query the correct row in
+          DB -->
+          <input
+            type="text"
+            name="articleID"
+            value="<%= draftData[index].articleID %>"
+            readonly
+            style="display: none"
+          />
+          <input
+            type="text"
+            class="border-0"
+            name="title"
+            value="<%= draftData[index].title %>"
+            readonly
+          />
+          <input
+            type="text"
+            class="border-0"
+            name="subtitle"
+            value="<%= draftData[index].subtitle %>"
+            readonly
+          />
+          <input
+            type="text"
+            class="border-0"
+            name="dateCreated"
+            value="<%= draftData[index].dateCreated %>"
+            readonly
+          />
+          <input
+            type="text"
+            class="border-0"
+            name="dateModified"
+            value="<%= draftData[index].dateModified %>"
+            readonly
+          />
+          <button class="btn btn-xl btn-warning" type="submit" name="buttonClick" value="edit">
+            Edit
+          </button>
+          <button class="btn btn-xl btn-danger" type="submit" name="buttonClick" value="delete">
+            Delete
+          </button>
+          <button class="btn btn-xl btn-success" type="submit" name="buttonClick" value="publish">
+            Publish
+          </button>
+        </form>
+        <% }) %> <% } %>
+
+        <!------------------>
+        <div class="col-md px-0 d-flex justify-content-center">
+          <a id="CD_btn" class="btn btn-xl btn-primary" href="/route/creation">Create New Draft</a>
+          <style>
+            #CD_btn {
+              margin-top: 1em;
+            }
+          </style>
+        </div>
+      </div>
+    </div>
+    <%-include('index_templates/footer')-%>
+    <!--send the share button click, so server knows which button has been pressed-->
+    <script>
+      // Function to show the share alert url
+      function showAlertWithArticleID(articleID) {
+        alert(`http://localhost:3000/reader?articleID=${articleID}`);
+      }
+      document.addEventListener("click", function (event) {
+        if (event.target && event.target.matches("button[value='share']")) {
+          const form = event.target.closest("form");
+          //articleID from the form
+          const articleID = form.querySelector("input[name='articleID']").value;
+          //call the function to show the alert function with correct articleID
+          showAlertWithArticleID(articleID);
+        }
+      });
+    </script>
+  </body>
+</html>

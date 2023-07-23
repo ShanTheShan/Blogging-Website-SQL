@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('index_templates/header')-%>
+  <body>
+    <div class="container">
+      <header class="blog-header py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+          <div class="col-4 pt-1"><a class="btn btn-primary" href="/">Back</a></div>
+          <div class="col-4 text-center">
+            <a class="blog-header-logo text-dark" href="/">The Blog</a>
+          </div>
+          <div class="col-4 d-flex justify-content-end align-items-center"></div>
+        </div>
+      </header>
+
+      <div class="nav-scroller py-1 mb-2">
+        <nav class="nav d-flex justify-content-center"></nav>
+      </div>
+      <div class="row mb-2 justify-content-center">
+        <!--dynamically render the article our reader clicked-->
+        <div class="col-md-6 text-center">
+          <h3><%= article.title %></h3>
+          <h5><%= article.sub_title %></h5>
+          <p class="text-muted font-italic">By: <%= author.dashboardAuthor %></p>
+          <p class="text-muted font-italic">Published On: <%= article.published %></p>
+          <p class="text-muted font-italic">Likes: <%= article.likes %></p>
+
+          <div class="mt-4"></div>
+          <p class="card-text mb-auto"><%= article.body %></p>
+          <div class="mt-4">
+            <!--when like button is clicked, send the articleID of the currently rendered article on the page-->
+            <!--back to the server, to update the database-->
+            <a href="/like?articleID=<%= article.articleID %>" class="btn btn btn-success">Like</a>
+          </div>
+          <form class="mt-4" action="/comments" method="POST">
+            <div>
+              <h5>Comments</h5>
+              <!--hide the articleID, so when form post submits, we have the current page articleID-->
+              <input
+                type="text"
+                name="articleID"
+                value="<%= article.articleID %>"
+                readonly
+                style="display: none"
+              />
+              <textarea class="form-control" id="body" name="comments" rows="1"></textarea>
+            </div>
+            <div class="py-2">
+              <button type="submit">Submit</button>
+            </div>
+            <!--retrieve the comments passed in from database to server-->
+            <!--check is true and is populated-->
+            <!--dynamically iterate over the comments and render them on the page-->
+            <% if (comments && comments.length > 0) { %> <% comments.forEach((comment) => { %>
+            <div
+              class="row no-gutters border rounded overflow-hidden flex-md-row mb-1 shadow-sm h-md-1 position-relative bg-secondary"
+            >
+              <div class="col">
+                <p class="pt-4 text-white font-weight-bold"><%= comment.body %></p>
+                <p class="text-white font-weight-bold">Posted on: <%= comment.datePosted %></p>
+              </div>
+            </div>
+            <% }); %> <% } else { %>
+            <p class="font-italic">Article does not have any comments, yet!</p>
+            <% } %>
+          </form>
+
+          <div class="col-auto d-none d-lg-block"></div>
+        </div>
+      </div>
+    </div>
+
+    <main role="main" class="container">
+      <div class="row">
+        <div class="col-md-8 blog-main"></div>
+      </div>
+    </main>
+    <%-include('index_templates/footer')-%>
+  </body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('index_templates/header')-%>
+  <body>
+    <div class="container">
+      <header class="blog-header py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+          <div class="col-4 pt-1"><a class="btn btn-primary" href="/route/dashboard">Back</a></div>
+          <div class="col-4 text-center">
+            <h1><%= locals.user%>'s Dashboard</h1>
+            <h2>Author Settings</h2>
+          </div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <a class="btn btn-sm btn-danger" style="margin-left: 15px" href="/route/logout"
+              >Sign Out</a
+            >
+          </div>
+        </div>
+      </header>
+      <div class="jumbotron p-4 p-md-4 text-white rounded bg-dark">
+        <div class="form-group d-flex justify-content-center align-items-center">
+          <!--send form result to this href, via POST method-->
+          <form id="authorsettingsForm" action="/route/settings" method="POST">
+            <div>
+              <label for="blog_title">Blog Title</label>
+              <input
+                type="text"
+                id="blog_title"
+                name="blog_title"
+                value="<%=authorTitle%>"
+                required
+              />
+              <label for="blog_sub_title">Blog Sub-Title</label>
+              <input
+                type="text"
+                id="blog_sub_title"
+                name="blog_sub_title"
+                value="<%=authorSubT%>"
+                required
+              />
+              <label for="author_name">Author Name</label>
+              <input
+                type="text"
+                id="author_name"
+                name="author_name"
+                value="<%=authorName%>"
+                required
+              />
+            </div>
+            <div class="py-2 d-flex justify-content-center align-items-center">
+              <button type="submit" id="edit-draft">Save</button>
+            </div>
+          </form>
+        </div>
+        <div id="create-done" class="container w-30 border border-secondary py-1 d-none">
+          <p class="text-dark">Settings succesfully saved! Returning to dashboard...</p>
+        </div>
+      </div>
+    </div>
+    <%-include('index_templates/footer')-%>
+  </body>
+  <style>
+    #create-done {
+      background-color: rgb(102, 212, 102);
+    }
+  </style>
+
+  <script>
+    //we will displasy settings successfully saved! only when input fields are properly submitted
+    //get the post form
+    let form = document.getElementById("authorsettingsForm");
+    //get the div that contains the settings succesfull msg
+    let targetDiv = document.getElementById("create-done");
+    let formSubmitButton = document.getElementById("edit-draft");
+
+    form.addEventListener("submit", function (event) {
+      //heck if the form is valid
+      if (form.checkValidity()) {
+        //prevent the default form submission behavior
+        event.preventDefault();
+        //show the message
+        targetDiv.classList.remove("d-none");
+        targetDiv.classList.add("d-block");
+        //we want the author to be able to read the 'successfully edited the article' message
+        setTimeout(() => {
+          //after 2 seconds, send form to server
+          event.target.closest("form").submit();
+        }, 2000);
+        formSubmitButton.addEventListener("click", handleButtonClick);
+        //proceed with form submission after showing the message
+        form.submit();
+      }
+    });
+  </script>
+</html>

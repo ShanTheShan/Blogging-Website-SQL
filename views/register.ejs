@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('login_register_templates/header')-%>
+  <body>
+    <div class="d-flex align-items-center justify-content-center" style="min-height: 100vh">
+      <div class="text-center center div" id="login-div">
+        <div class="container w-30 border py-2">
+          <a href="../">Back</a>
+          <form id="registrationForm" action="/route/register" method="POST">
+            <div>
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" required />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input type="email" id="email" name="userEmail" required />
+            </div>
+            <div>
+              <label for="password">Password</label>
+              <input type="password" id="password" name="passwords" required />
+            </div>
+            <div class="py-2">
+              <button id="registerBTN" type="submit">Register</button>
+            </div>
+          </form>
+          <!-- redirect to login page -->
+          <a href="/login">Login</a>
+          <div id="register-div" class="container w-30 border py-1 d-none">
+            <p>Registration Successful! Proceed to login</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <style>
+      #register-div {
+        background-color: rgb(102, 212, 102);
+      }
+    </style>
+
+    <script>
+      //we will displasy Registration Successful only when input fields are properly submitted
+      //get the post form
+      const form = document.getElementById("registrationForm");
+      //get the div that contains the registration succesfull msg
+      const targetDiv = document.getElementById("register-div");
+      form.addEventListener("submit", function (event) {
+        //check if the form is valid
+        if (form.checkValidity()) {
+          event.preventDefault();
+          //show the message div
+          targetDiv.classList.remove("d-none");
+          targetDiv.classList.add("d-block");
+          //proceed with form submission after showing the message
+          form.submit();
+        }
+      });
+    </script>
+  </body>
+</html>
