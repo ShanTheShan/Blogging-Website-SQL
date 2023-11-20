@@ -15,3 +15,15 @@ simply just type the command into the terminal.
 
 To clean and delete the database, you dont have to run the clean-db command
 Just manually click and delete the database.db
+
+----------------------------------------------
+Home page of the website
+
+![home_page](https://github.com/ShanTheShan/Blogging-Website-SQL/assets/96246152/5edb0599-fbc9-48d9-875c-b39812409176)
+----------------------------------------------
+
+----------------------------------------------
+Logged in
+
+![main_page](https://github.com/ShanTheShan/Blogging-Website-SQL/assets/96246152/5523740e-ca22-4c7d-8bc0-6566c6054a0e)
+----------------------------------------------
